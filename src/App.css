@@ -1,0 +1,596 @@
+.App { 
+    background-color:#f4f4f4; 
+    
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 20vw auto; /* Sidebar takes 20% of the width, main content takes the rest */
+    grid-template-rows: auto 1fr; /* Header is auto height, content takes remaining space */
+    grid-template-areas: 
+      "sidebar header"
+      "sidebar main-content";
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .sidebar {
+    grid-area: sidebar;
+    width: 16vw;
+    padding: 20px;
+    background-color: #1f2024;
+    color: white;
+    margin: 15px;
+    height: 88vh;
+    position: fixed;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;  
+    overflow-y: auto; 
+    overflow-x: hidden;
+  }
+  
+  .main-content {
+    grid-area: main-content;
+    overflow-y: auto;
+    margin: left;
+    margin-left: 300px;
+    background-color: #f4f4f4;
+  }
+  
+  .header {
+    grid-area: header;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ccc;
+    border-radius: 10px; 
+    margin-left: 15px;
+    position: sticky; /* Header stays on top when scrolling */
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* Sidebar styling */
+  .sidebar ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .sidebar ul li {
+    padding: 15px 0;
+    cursor: pointer;
+    font-size: medium;
+    border-radius: 8px;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  
+  .sidebar li:hover {
+    background-color: #30323b;
+    transform: scale(1.05);
+  }
+  
+  /* Main content area */
+  .main-content {
+    background-color: #f4f4f4;
+    padding: 20px;
+    min-height: calc(100vh - 70px); /* Adjust based on header height */
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+  }
+  
+  .pagination li {
+    margin: 0 5px;
+  }
+  
+  .pagination a {
+    display: block;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .pagination a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .pagination .active a {
+    background-color: #4CAF50;
+    color: #fff;
+    border: 1px solid #4CAF50;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 1024px) {
+    .layout {
+      grid-template-columns: 1fr; /* Full-width for main content */
+      grid-template-areas: 
+        "header"
+        "main-content";
+    }
+  
+    .sidebar {
+      display: none; /* Hide sidebar on small screens */
+    }
+  
+    .main-content {
+      margin-left: 20px; /* No need to offset the sidebar */
+      width: 100vw;
+    }
+  
+    .header {
+      position: static; /* Header scrolls with the content on small screens */
+    }
+  }
+  
+  /* Responsive for mobile */
+  @media (max-width: 768px) {
+    .main-content {
+      padding: 10px;
+    }
+  
+    .header {
+      padding: 10px;
+    }
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-right input {
+    padding: 5px;
+    margin-right: 15px;
+  }
+  .dashboard-stat{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  
+  /* General Styling */
+  .stats-card, .chart-card, .table {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Stats Cards */
+  .stats-card{
+    display: inline-block;
+    width: 26%;
+    margin-right: 1%;
+    text-align: center;
+    height: 100px;
+  }
+  
+  .stats-card-count {
+    font-size: xx-large;
+  }
+  
+  /* Chart Cards */
+  .chart-card {
+    display: inline-flex;
+    flex-direction: column;
+    width: 26%;
+    margin-right: 1%;
+    text-align: center;
+  }
+  .heading {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
+  .chart {
+    height: auto;
+    background-color: #ffffff66;
+    margin-top: 10px;
+    border-radius: 5px;
+  }
+  
+  /* Responsive Styling */
+  
+  /* Tablet view (width less than 1024px) */
+  @media (max-width: 1024px) {
+    .stats-card, .chart-card {
+      width: 48%;
+      margin: 10px 1%;
+    }
+    
+    .stats-card {
+      height: 120px;
+    }
+  
+    .chart-card {
+      width: 48%;
+    }
+  
+  }
+  
+  /* Mobile view (width less than 768px) */
+  @media (max-width: 768px) {
+  
+  
+    .stats-card, .chart-card {
+      width: 90%;
+      display: block;
+      margin: none;
+      
+    }
+    
+    .stats-card {
+      height: auto;
+      margin-bottom: 10px;
+     
+    }
+  
+    .chart-card {
+      width: 95vw;
+      margin-bottom: 20px;
+    }
+  
+    .chart {
+      margin-top: 15px;
+      border-radius: 8px;
+    }
+  }
+  
+  .search-bar {
+    position: relative;
+    width: 100%;
+    height: 34px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    margin-left: 2px;
+    background-color: #f2f2f2;
+    border-radius: 5px;
+    font-size: 16px;
+    color: rgb(31, 30, 30);
+    
+  }
+  
+  .CreateTicket-container {
+    position: relative; /* Positioning context for the button */
+    display: flex;
+    justify-content: flex-end; /* Align items to the right */
+  }
+  
+  .button {
+    align-self: flex-end; /* Align the button to the bottom of the flex container */
+    background-color: #66bb6a;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bolder;
+    margin: 4px 2px;
+    margin-right: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover{
+    background-color: #66bb6a;
+  }
+  
+  /* App.css or CreateTicket.css */
+  .form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it appears above other content */
+  }
+  
+  .create-ticket-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px; /* Adjust width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for 3D effect */
+    position: relative; /* For positioning the close button */
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #f44336; /* Red background */
+    color: rgb(0, 0, 0) !important;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .close-button:hover {
+    background: #d32f2f; /* Darker red on hover */
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .create-div {
+    margin-bottom: 15px;
+  }
+  
+  label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    display: block;
+  }
+  
+  input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+  }
+  
+  textarea {
+    resize: vertical; /* Allow vertical resizing only */
+    min-height: 100px; /* Minimum height for the textarea */
+  }
+  
+  .create-button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    align-self: flex-start; /* Align button to the start of the form */
+  }
+  
+  .ticket-details-form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%;
+      max-width: 800px;
+      overflow-y: auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+  }
+  
+  
+  
+  .form-group {
+      margin-bottom: 15px;
+  }
+  
+  .form-group label {
+      display: block;
+      margin-bottom: 5px;
+  }
+  
+  .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+  
+  .submit-button {
+      background: green;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+  }
+  
+  .ticket-details-form, .create-ticket-form {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    height: 90vh;
+    max-width: 800px;
+    overflow-y: auto;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .close-button {
+    align-self: flex-end;
+    background: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+  }
+  
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .submit-button {
+    background: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    background: grey;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-left: 15px;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .ticket-count {
+    margin: 20px;
+  }
+  
+  .ticket-count h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .text-color{
+    color: #212225;
+  }
+  
+  .logotext{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0%;
+    padding: 0%;
+  }
+  
+  .logotext h2{
+    margin-left: 2px;
+  }
+  
+  .alignment{
+    display: flex;
+  }
+  
+  .alignment, .CreateTicket-container{
+    position: relative; /* Positioning context for the button */
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 10px;
+  
+  }
+  
+  /* General Table Styles */
+  .table {
+    width: 100%;
+    overflow-x: auto; /* Allows horizontal scroll on small screens */
+    border-collapse: collapse;
+  }
+  
+  .ticketing-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+    text-align: left;
+  }
+  
+  
+  .table-heading {
+    padding: 12px;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    text-align: center;
+    border: none;
+  }
+  
+  .ticketing-table th,
+  .ticketing-table td {
+    padding: 12px;
+    border-bottom: #858689;
+  }
+  
+  .ticketing-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  /* Responsive Styles */
+  @media screen and (max-width: 768px) {
+    .ticketing-table thead {
+      display: none;
+    }
+  
+    .ticketing-table, .ticketing-table tbody, .ticketing-table tr, .ticketing-table td {
+      display: block;
+      width: 100%;
+    }
+  
+    .ticketing-table tr {
+      margin-bottom: 15px;
+    }
+  
+    .ticketing-table td {
+      text-align: right;
+      padding-left: 50%;
+      position: relative;
+    }
+  
+    .ticketing-table td:before {
+      content: attr(data-column);
+      position: absolute;
+      left: 0;
+      width: 45%;
+      padding-left: 10px;
+      font-weight: bold;
+      text-align: left;
+      background-color: #f2f2f2;
+      border-right: 1px solid #ddd;
+    }
+  }
+  
+  /* Styling for smaller screens */
+  @media screen and (max-width: 480px) {
+    .ticketing-table td {
+      padding-left: 40%;
+    }
+  
+    .ticketing-table td:before {
+      width: 35%;
+    }
+  }
