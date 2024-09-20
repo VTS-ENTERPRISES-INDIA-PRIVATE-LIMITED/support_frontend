@@ -38,6 +38,7 @@ function AllTickets() {
   // Total pages
   const pageCount = Math.ceil(data.length / itemsPerPage);
 
+  // Columns to display
   const allColumns = [
     "TicketId",
     "productId",
@@ -53,6 +54,32 @@ function AllTickets() {
     "PhnNumber",
     "TicketCategory",
   ];
+
+  // Function to get display text for AssignedStatus
+  const getAssignedStatusText = (status) => {
+    switch (status) {
+      case '0':
+        return "Not Assigned";
+      case '1':
+        return "Assigned";
+      case '2':
+        return "Completed";
+    
+    }
+  };
+
+  // Function to get display text for Status
+  const getStatusText = (status) => {
+    switch (status) {
+      case '0':
+        return "Open";
+      case '1':
+        return "Pending";
+      case '2':
+        return "Closed";
+      
+    }
+  };
 
   return (
     <div>
@@ -70,7 +97,11 @@ function AllTickets() {
               <tr key={row.TicketId}>
                 {allColumns.map((col, colIndex) => (
                   <td key={colIndex} data-column={col}>
-                    {row[col]}
+                    {col === "AssignedStatus"
+                      ? getAssignedStatusText(row.AssignedStatus) // Custom display for AssignedStatus
+                      : col === "Status"
+                      ? getStatusText(row.Status) // Custom display for Status
+                      : row[col]} {/* Default display for other columns */}
                   </td>
                 ))}
               </tr>

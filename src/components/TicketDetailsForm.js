@@ -1,41 +1,48 @@
 import React, { useState } from "react";
-import axios from "axios"; 
-import { Description } from "@mui/icons-material";
+import axios from "axios";
 
 function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refreshTickets }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-//   const handleUpdateStatus = (ticketId) => {
-//     axios
-//       .put(`http://localhost:5000/ticket/updateticketstatus/${ticketId}`)
-//       .then((response) => {
-//         console.log("AssignedStatus updated successfully:", response.data);
-//         // Optionally refetch tickets after the update
-//         fetchTickets();
-//       })
-//       .catch((error) => {
-//         console.error("Error updating AssignedStatus:", error);
-//       });
-//   };
+  const getAssignedStatusText = (status) => {
+    switch (status) {
+      case '0':
+        return "Not Assigned";
+      case '1':
+        return "Assigned";
+      case '2':
+        return "Completed";
+    }
+  };
 
   const handleFormSave = async (event) => {
     event.preventDefault();
     setLoading(true);
   
+    // Determine status value to send based on formData.Status
+    const statusValue = formData.Status === "CLOSED" ? '2' : '1'; // Closed sends 2, Pending sends 1
+  
     try {
       const response = await axios.put(
         `http://localhost:5000/ticket/updateTicket/${formData.TicketId}`,
         {
-          DueDate:formData.DueDate,
+          DueDate: formData.DueDate,
           Description: formData.Description,
-          Status: formData.Status, 
+          Status: statusValue, // Send the mapped status value
         }
       );
   
       if (response.status === 200) {
         alert("Ticket updated successfully!");
-        refreshTickets();  // Refresh ticket list
+  
+        // Check if status was updated to CLOSED
+        if (formData.Status === "CLOSED") {
+          // Call the updateTicketStatus API
+          await axios.put(`http://localhost:5000/ticket/updateticketstatus/${formData.TicketId}`);
+        }
+  
+        refreshTickets(); // Refresh ticket list
         handleFormCancel(); // Close the form after user clicks "OK" on alert
       } else {
         alert("Failed to update ticket.");
@@ -48,7 +55,6 @@ function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refr
     }
   };
   
-
   return (
     <div className="form-overlay">
       <div className="ticket-details-form">
@@ -57,10 +63,8 @@ function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refr
         </button>
         <h2>Ticketing Details</h2>
         {error && <p className="error-message">{error}</p>}
-        {error && <p className="error-message">{error}</p>}
+        
         <form onSubmit={handleFormSave}>
-          {/* Form Fields */}
-          {/* Form Fields */}
           <div className="form-group">
             <label htmlFor="ticket-id">Ticket ID:</label>
             <input
@@ -97,7 +101,7 @@ function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refr
               type="text"
               id="assignee-name"
               name="AssigneeName"
-              value={formData.AssignedStatus}
+              value={getAssignedStatusText(formData.AssignedStatus)} // Use function to get text
               readOnly
             />
           </div>
@@ -117,21 +121,10 @@ function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refr
               type="text"
               id="DueDate"
               name="DueDate"
-              rows="4"
               value={formData.DueDate}
               onChange={handleInputChange}
             />
           </div>
-          {/* <div className="form-group">
-            <label htmlFor="resolved-date">Resolved Date:</label>
-            <input
-              type="date"
-              id="resolved-date"
-              name="ResolvedDate"
-              value={formData.ResolvedDate}
-              onChange={handleInputChange}
-            />
-          </div> */}
           <div className="form-group">
             <label htmlFor="priority">Priority:</label>
             <input
@@ -155,7 +148,6 @@ function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refr
           <div className="form-group">
             <label htmlFor="description">Description:</label>
             <textarea
-             type="text"
               id="description"
               name="Description"
               rows="4"
@@ -163,7 +155,6 @@ function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refr
               onChange={handleInputChange}
             />
           </div>
-         
           <div className="form-group">
             <label htmlFor="phn-number">Phone Number:</label>
             <input
@@ -178,25 +169,27 @@ function TicketDetailsForm({ formData, handleInputChange, handleFormCancel, refr
             <label htmlFor="status">Status:</label>
             <select
               id="status"
-              name="Status"  // Ensure this matches the formData key
+              name="Status"
               value={formData.Status}
               onChange={handleInputChange}
+           
             >
-              <option value="CLOSED">CLOSED</option>
               <option value="PENDING">PENDING</option>
+              <option value="CLOSED">CLOSED</option>
+              
             </select>
           </div>
           <div className="form-buttons">
             <button type="submit" className="submit-button" disabled={loading}>
               {loading ? "Saving..." : "Save"}
-              </button>
-             <button
+            </button>
+            <button
               type="button"
               className="cancel-button"
-              onClick={handleFormCancel}>
+              onClick={handleFormCancel}
+            >
               Cancel
-              </button>
-              
+            </button>
           </div>
         </form>
       </div>

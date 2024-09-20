@@ -67,6 +67,31 @@ function OpenTickets() {
     "TicketCategory",
     "Action" // Add Action column here
   ];
+// Function to get display text for AssignedStatus
+const getAssignedStatusText = (status) => {
+  switch (status) {
+    case '0':
+      return "Not Assigned";
+    case '1':
+      return "Assigned";
+    case '2':
+      return "Completed";
+  
+  }
+};
+
+// Function to get display text for Status
+const getStatusText = (status) => {
+  switch (status) {
+    case '0':
+      return "Open";
+    case '1':
+      return "Pending";
+    case '2':
+      return "Closed";
+    
+  }
+};
 
   return (
     <div>
@@ -82,10 +107,14 @@ function OpenTickets() {
           <tbody>
             {currentItems.map((row) => (
               <tr key={row.TicketId}>
-                {allColumns.slice(0, -1).map((col, colIndex) => (
+                {allColumns.map((col, colIndex) => (
                   <td key={colIndex} data-column={col}>
-                    {row[col]}
-                  </td>
+                  {col === "AssignedStatus"
+                    ? getAssignedStatusText(row.AssignedStatus) // Custom display for AssignedStatus
+                    : col === "Status"
+                    ? getStatusText(row.Status) // Custom display for Status
+                    : row[col]} {/* Default display for other columns */}
+                </td>
                 ))}
                 <td>
                   <button 
