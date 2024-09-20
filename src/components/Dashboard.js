@@ -21,16 +21,27 @@ function Dashboard() {
       value: feedbackData.likelyNotToContinue,
     },
   ];
+
+  // Move statusLabelMap outside so it can be accessed globally
+  const statusLabelMap = {
+    '0': 'Open',
+    '1': 'Pending',
+    '2': 'Closed',
+  };
+
+  // Moved the formatStatusLabel function outside
+  const formatStatusLabel = (status) => statusLabelMap[status] || status;
+
   // Fetch ticket statistics from backend APIs
   useEffect(() => {
-      const fetchTicketsStats = async () => {
+    const fetchTicketsStats = async () => {
       try {
-        const [totalRes,pendingRes, feedbackRes, resolvedRes, assignedStatusRes] = await Promise.all([
+        const [totalRes, pendingRes, feedbackRes, resolvedRes, assignedStatusRes] = await Promise.all([
           fetch("http://localhost:5000/ticket/getTicketCount"),
           fetch("http://localhost:5000/ticket/getPendingTicketsCount"),
           fetch("http://localhost:5000/ticket/getfeedback"),
           fetch("http://localhost:5000/ticket/getResolvedTicketsCount"),
-          fetch("http://localhost:5000/ticket/getassigneestatus")
+          fetch("http://localhost:5000/ticket/getassigneestatus"),
         ]);
         const totalData = await totalRes.json();
         const feedbackData = await feedbackRes.json();
@@ -49,9 +60,9 @@ function Dashboard() {
 
         // Prepare data for the Assigned Status bar chart
         const transformedAssignedStatus = [
-          { Status: "Completed", Count: assignedStatus.find(status => status.Status === "Completed")?.status_count || 0 },
-          { Status: "Assigned", Count: assignedStatus.find(status => status.Status === "Assigned")?.status_count || 0 },
-          { Status: "Not Assigned", Count: assignedStatus.find(status => status.Status === "Not Assigned")?.status_count || 0 },
+          { Status: "Completed", Count: assignedStatus.find((status) => status.Status === "Completed")?.status_count || 0 },
+          { Status: "Assigned", Count: assignedStatus.find((status) => status.Status === "Assigned")?.status_count || 0 },
+          { Status: "Not Assigned", Count: assignedStatus.find((status) => status.Status === "Not Assigned")?.status_count || 0 },
         ];
 
         setAssignedStatusData(transformedAssignedStatus);
@@ -130,48 +141,41 @@ function Dashboard() {
 
         {/* Bar Chart: Assigned Status */}
         <div className="chart-card center-chart">
-  <div className="heading">Assigned Status Overview</div>
-  <div className="chart">
-    <BarChart
-      width={300}  // Adjust the width if needed
-      height={300} // Adjust the height if needed
-      data={assignedStatusData}
-      layout="vertical" // Set layout to vertical for horizontal bars
-      margin={{
-        top: 20,
-        right: 30,
-        bottom: 5,
-        left: 20, // Adjust margins if needed
-      }}
-    >
-      <XAxis type="number" />
-      <YAxis type="category" dataKey="Status" />
-      <Tooltip />
-      <Legend wrapperStyle={{ display: 'none' }} /> {/* Hide the default legend */}
-      <Bar 
-        dataKey="Count" 
-        barSize={40} // Adjust the size of the bars here
-      >
-        {assignedStatusData.map((entry, index) => (
-          <Cell
-            key={`cell-${index}`}
-            fill={
-              entry.Status === "Completed"
-                ? "#4CAF50" // Color for Completed
-                : entry.Status === "Assigned"
-                ? "#8884d8" // Color for Assigned
-                : "#ff6961" // Color for Not Assigned
-            }
-          />
-        ))}
-      </Bar>
-    </BarChart>
-  </div>
-</div>
-
-
-
-
+          <div className="heading">Assigned Status Overview</div>
+          <div className="chart">
+            <BarChart
+              width={300}
+              height={300}
+              data={assignedStatusData}
+              layout="vertical"
+              margin={{
+                top: 20,
+                right: 30,
+                bottom: 5,
+                left: 20,
+              }}
+            >
+              <XAxis type="number" />
+              <YAxis type="category" dataKey="Status" />
+              <Tooltip />
+              <Legend wrapperStyle={{ display: 'none' }} />
+              <Bar dataKey="Count" barSize={40}>
+                {assignedStatusData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={
+                      entry.Status === "Completed"
+                        ? "#4CAF50"
+                        : entry.Status === "Assigned"
+                        ? "#8884d8"
+                        : "#ff6961"
+                    }
+                  />
+                ))}
+              </Bar>
+            </BarChart>
+          </div>
+        </div>
 
         {/* Bar Chart for Status vs Feedback */}
         <div className="chart-card center-chart">
@@ -187,7 +191,7 @@ function Dashboard() {
                 bottom: 5,
               }}
             >
-              <XAxis dataKey="Status" />
+              <XAxis dataKey="Status" tickFormatter={formatStatusLabel} />
               <YAxis />
               <Tooltip />
               <Legend />
@@ -201,4 +205,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard; 
+export default Dashboard;
