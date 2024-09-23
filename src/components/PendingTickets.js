@@ -14,7 +14,7 @@ function PendingTickets() {
   // Fetch pending tickets
   const fetchTickets = () => {
     axios
-      .get("http://localhost:5000/ticket/getPendingTickets")
+      .get(`${process.env.REACT_APP_URL}/ticket/getPendingTickets`)
       .then((response) => {
         setData(response.data);
       })

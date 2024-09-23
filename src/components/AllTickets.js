@@ -11,7 +11,7 @@ function AllTickets() {
   // Fetch tickets from backend
   const fetchTickets = () => {
     axios
-      .get("http://localhost:5000/ticket/getAllTickets")
+      .get(`${process.env.REACT_APP_URL}/ticket/getAllTickets`)
       .then((response) => {
         setData(response.data);
       })

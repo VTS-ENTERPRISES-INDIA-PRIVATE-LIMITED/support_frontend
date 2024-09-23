@@ -40,7 +40,7 @@ function OpenTickets() {
 
   const handlePickUpTicket = (ticketId) => {
     axios
-      .put(`http://localhost:5000/ticket/updateassignedstatus/${ticketId}`)
+      .put(`${process.env.REACT_APP_URL}/ticket/updateassignedstatus/${ticketId}`)
       .then((response) => {
         toast.success("The ticket has been assigned to you. Please solve it and update the status in the pending list.");
         fetchTickets(); // Re-fetch the tickets to update the UI

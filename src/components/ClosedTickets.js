@@ -11,7 +11,7 @@ function ClosedTickets() {
   // Fetch tickets from backend
   const fetchTickets = () => {
     axios
-      .get("http://localhost:5000/ticket/getClosedTickets")
+      .get(`${process.env.REACT_APP_URL}/ticket/getClosedTickets`)
       .then((response) => {
         setData(response.data);
       })

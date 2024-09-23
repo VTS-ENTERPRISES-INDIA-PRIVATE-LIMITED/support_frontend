@@ -37,11 +37,11 @@ function Dashboard() {
     const fetchTicketsStats = async () => {
       try {
         const [totalRes, pendingRes, feedbackRes, resolvedRes, assignedStatusRes] = await Promise.all([
-          fetch("http://localhost:5000/ticket/getTicketCount"),
-          fetch("http://localhost:5000/ticket/getPendingTicketsCount"),
-          fetch("http://localhost:5000/ticket/getfeedback"),
-          fetch("http://localhost:5000/ticket/getResolvedTicketsCount"),
-          fetch("http://localhost:5000/ticket/getassigneestatus"),
+          fetch(`${process.env.REACT_APP_URL}/ticket/getTicketCount`),
+          fetch(`${process.env.REACT_APP_URL}/ticket/getPendingTicketsCount`),
+          fetch(`${process.env.REACT_APP_URL}/ticket/getfeedback`),
+          fetch(`${process.env.REACT_APP_URL}/ticket/getResolvedTicketsCount`),
+          fetch(`${process.env.REACT_APP_URL}/ticket/getassigneestatus`),
         ]);
         const totalData = await totalRes.json();
         const feedbackData = await feedbackRes.json();
